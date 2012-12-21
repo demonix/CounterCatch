@@ -15,7 +15,7 @@ namespace CounterCatch.Configurations
                             System.Configuration.ConfigurationManager.GetSection("counterCatch");
 
             if (section == null && throwIfNotFound)
-                throw new ConfigurationException("CounterCatch configuration not found.");
+                throw new ConfigurationErrorsException("CounterCatch configuration not found.");
 
             return section;
         }
@@ -92,15 +92,6 @@ namespace CounterCatch.Configurations
         {
         }
 
-        public CounterElement(string id, string host, string category, string name, string instance)
-        {
-            Id = id;
-            Host = host;
-            Name = name;
-            Category = category;
-            Instance = instance;
-        }
-
         [ConfigurationProperty("id", IsRequired = true, IsKey=true)]
         public string Id
         {
@@ -114,16 +105,16 @@ namespace CounterCatch.Configurations
             }
         }
 
-        [ConfigurationProperty("host", IsRequired = false, DefaultValue="")]
-        public string Host
+        [ConfigurationProperty("hosts", IsRequired = false, DefaultValue="localhost")]
+        public string Hosts
         {
             get
             {
-                return (string)this["host"];
+                return (string)this["hosts"];
             }
             set
             {
-                this["host"] = value;
+                this["hosts"] = value;
             }
         }
 
@@ -166,5 +157,9 @@ namespace CounterCatch.Configurations
             }
         }
 
+        public IEnumerable<string> GetHosts()
+        {
+            return Hosts.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim());
+        }
     }
 }

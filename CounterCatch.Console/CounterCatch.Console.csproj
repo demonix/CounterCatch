@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -75,7 +76,7 @@
   <ItemGroup>
     <Compile Include="Configurations\CounterCatchSection.cs" />
     <Compile Include="Models\CounterData.cs" />
-    <Compile Include="Services\CounterCollector.cs" />
+    <Compile Include="Services\CounterStream.cs" />
     <Compile Include="Models\CounterInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
