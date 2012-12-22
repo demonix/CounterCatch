@@ -21,12 +21,22 @@ namespace CounterCatch.Configurations
         }
 
         [ConfigurationProperty("counters")]
-        [ConfigurationCollection(typeof(CountersCollection))]
-        public CountersCollection Counters
+        [ConfigurationCollection(typeof(CounterElementsCollection))]
+        public CounterElementsCollection Counters
         {
             get
             {
-                return (CountersCollection)base["counters"];
+                return (CounterElementsCollection)base["counters"];
+            }
+        }
+
+        [ConfigurationProperty("hostGroups")]
+        [ConfigurationCollection(typeof(HostGroupElementCollection))]
+        public HostGroupElementCollection HostGroups
+        {
+            get
+            {
+                return (HostGroupElementCollection)base["hostGroups"];
             }
         }
 
@@ -35,10 +45,13 @@ namespace CounterCatch.Configurations
             var data = new List<CounterInfo>();
             foreach (var counter in Counters)
             {
-                var hosts = counter.GetHosts();
-                foreach (var host in hosts)
+                var hostGroup = HostGroups[counter.HostGroup];
+                if (hostGroup == null)
+                    throw new ConfigurationErrorsException(string.Format("HostGroup '{0}' not defined.", counter.HostGroup));
+
+                foreach (var host in hostGroup.Hosts)
                 {
-                    var counterInfo = new CounterInfo(host, counter.Category, counter.Name, counter.Instance);
+                    var counterInfo = new CounterInfo(host.Name, counter.Category, counter.Name, counter.Instance);
 
                     data.Add(counterInfo);
                 }
@@ -47,9 +60,9 @@ namespace CounterCatch.Configurations
         }
     }
 
-    public class CountersCollection : ConfigurationElementCollection, IEnumerable<CounterElement>
+    public class CounterElementsCollection : ConfigurationElementCollection, IEnumerable<CounterElement>
     {
-        public CountersCollection()
+        public CounterElementsCollection()
         {
         }
 
@@ -121,16 +134,16 @@ namespace CounterCatch.Configurations
             }
         }
 
-        [ConfigurationProperty("hosts", IsRequired = false, DefaultValue="localhost")]
-        public string Hosts
+        [ConfigurationProperty("hostGroup", IsRequired = true)]
+        public string HostGroup
         {
             get
             {
-                return (string)this["hosts"];
+                return (string)this["hostGroup"];
             }
             set
             {
-                this["hosts"] = value;
+                this["hostGroup"] = value;
             }
         }
 
@@ -172,10 +185,144 @@ namespace CounterCatch.Configurations
                 this["instance"] = value;
             }
         }
+    }
 
-        public IEnumerable<string> GetHosts()
+    public class HostGroupElementCollection : ConfigurationElementCollection
+    {
+        public override ConfigurationElementCollectionType CollectionType
         {
-            return Hosts.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim());
+            get
+            {
+                return ConfigurationElementCollectionType.AddRemoveClearMap;
+            }
+        }
+
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return new HostGroupElement();
+        }
+
+        protected override Object GetElementKey(ConfigurationElement element)
+        {
+            return ((HostGroupElement)element).Id;
+        }
+
+        public HostGroupElement this[int index]
+        {
+            get
+            {
+                return (HostGroupElement)BaseGet(index);
+            }
+            set
+            {
+                if (BaseGet(index) != null)
+                {
+                    BaseRemoveAt(index);
+                }
+                BaseAdd(index, value);
+            }
+        }
+
+        new public HostGroupElement this[string id]
+        {
+            get
+            {
+                return (HostGroupElement)BaseGet(id);
+            }
         }
     }
+
+    public class HostGroupElement : ConfigurationElement
+    {
+        [ConfigurationProperty("id", IsRequired = true, IsKey = true)]
+        public string Id
+        {
+            get
+            {
+                return (string)this["id"];
+            }
+            set
+            {
+                this["id"] = value;
+            }
+        }
+
+        [ConfigurationProperty("hosts", IsDefaultCollection=true)]
+        [ConfigurationCollection(typeof(HostElementsCollection))]
+        public HostElementsCollection Hosts
+        {
+            get
+            {
+                return (HostElementsCollection)base["hosts"];
+            }
+        }
+    }
+
+    public class HostElementsCollection : ConfigurationElementCollection, IEnumerable<HostElement>
+    {
+        public override ConfigurationElementCollectionType CollectionType
+        {
+            get
+            {
+                return ConfigurationElementCollectionType.AddRemoveClearMap;
+            }
+        }
+
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return new HostElement();
+        }
+
+        protected override Object GetElementKey(ConfigurationElement element)
+        {
+            return ((HostElement)element).Name;
+        }
+
+        public HostElement this[int index]
+        {
+            get
+            {
+                return (HostElement)BaseGet(index);
+            }
+            set
+            {
+                if (BaseGet(index) != null)
+                {
+                    BaseRemoveAt(index);
+                }
+                BaseAdd(index, value);
+            }
+        }
+
+        new public HostElement this[string name]
+        {
+            get
+            {
+                return (HostElement)BaseGet(name);
+            }
+        }
+
+        public new IEnumerator<HostElement> GetEnumerator()
+        {
+            for (int i = 0; i < this.Count; i++)
+                yield return this[i];
+        }
+    }
+
+    public class HostElement : ConfigurationElement
+    {
+        [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
+        public string Name
+        {
+            get
+            {
+                return (string)this["name"];
+            }
+            set
+            {
+                this["name"] = value;
+            }
+        }
+    }
+
 }
