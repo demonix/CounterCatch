@@ -2,5 +2,5 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CounterCatch.Console")]
+[assembly: AssemblyTitle("CounterCatch.Core")]
 [assembly: AssemblyDescription("")]

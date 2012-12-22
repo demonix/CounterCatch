@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CounterCatch
 {
-    public class CounterData
+    public class CounterValue
     {
-        public CounterData(CounterInfo counter, DateTime time, double value)
+        public CounterValue(CounterInfo counter, DateTime time, double value)
         {
             Counter = counter;
             Time = time;

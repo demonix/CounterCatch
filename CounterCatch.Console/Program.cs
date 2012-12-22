@@ -16,32 +16,13 @@ namespace CounterCatch
 
             var section = Configurations.CounterCatchSection.GetSection();
 
-            var data = GetCountersStream(section);
+            var data = new MultiCounterStream(section.GetCounters());
 
-            using (data.Subscribe((c) => Console.WriteLine(string.Format("{0}:{1}", c.Counter, c.Value))))
+            using (data.Subscribe(new Observers.CounterAggregateObserver(new Observers.CounterCsvExportObserver(), new Observers.CounterConsoleObserver())))
             {
                 Console.WriteLine("Press enter to stop");
                 Console.ReadLine();
             }
-        }
-
-        static IObservable<CounterData> GetCountersStream(Configurations.CounterCatchSection section)
-        {
-            var data = Observable.Empty<CounterData>();
-            foreach (var counter in section.Counters)
-            {
-                var hosts = counter.GetHosts();
-                foreach (var host in hosts)
-                {
-                    var counterInfo = new CounterInfo(host, counter.Category, counter.Name, counter.Instance);
-                    Console.WriteLine("Registering to counter {0}", counterInfo);
-
-                    var counterStream = new CounterStream(counterInfo);
-
-                    data = data.Merge(counterStream);
-                }
-            }
-            return data;
         }
     }
 }

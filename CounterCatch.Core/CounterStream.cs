@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CounterCatch
 {
-    public class CounterStream : IObservable<CounterData>
+    public class CounterStream : IObservable<CounterValue>
     {
-        const string LocalHost = "localhost";
-        IObservable<CounterData> _data;
+        IObservable<CounterValue> _data;
         public CounterInfo Counter { get; private set; }
 
         public CounterStream(CounterInfo counter)
@@ -21,7 +15,7 @@ namespace CounterCatch
             Counter = counter;
 
             PerformanceCounter performanceCounter;
-            if (string.Equals(counter.Host, LocalHost, StringComparison.InvariantCultureIgnoreCase))
+            if (counter.IsLocalHost)
                 performanceCounter = new PerformanceCounter(counter.Category, counter.Name, counter.Instance);
             else
                 performanceCounter = new PerformanceCounter(counter.Category, counter.Name, counter.Instance, counter.Host);
@@ -31,14 +25,14 @@ namespace CounterCatch
                                 .Finally(() => performanceCounter.Dispose());
         }
 
-        CounterData NextData(PerformanceCounter performanceCounter)
+        CounterValue NextData(PerformanceCounter performanceCounter)
         {
             float counterValue = performanceCounter.NextValue();
 
-            return new CounterData(Counter, DateTime.Now, counterValue);
+            return new CounterValue(Counter, DateTime.Now, counterValue);
         }
 
-        public IDisposable Subscribe(IObserver<CounterData> observer)
+        public IDisposable Subscribe(IObserver<CounterValue> observer)
         {
             return _data.Subscribe(observer);
         }

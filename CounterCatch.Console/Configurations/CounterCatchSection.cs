@@ -29,6 +29,22 @@ namespace CounterCatch.Configurations
                 return (CountersCollection)base["counters"];
             }
         }
+
+        public IList<CounterInfo> GetCounters()
+        {
+            var data = new List<CounterInfo>();
+            foreach (var counter in Counters)
+            {
+                var hosts = counter.GetHosts();
+                foreach (var host in hosts)
+                {
+                    var counterInfo = new CounterInfo(host, counter.Category, counter.Name, counter.Instance);
+
+                    data.Add(counterInfo);
+                }
+            }
+            return data;
+        }
     }
 
     public class CountersCollection : ConfigurationElementCollection, IEnumerable<CounterElement>
