@@ -9,11 +9,11 @@ using System.Reactive.Disposables;
 
 namespace CounterCatch.Observers
 {
-    public class CounterAggregateObserver : IDisposable, IObserver<CounterValue>
+    public class MultiCounterObserver : CounterObserver
     {
         readonly IObserver<CounterValue>[] _observers;
 
-        public CounterAggregateObserver(params IObserver<CounterValue>[] observers)
+        public MultiCounterObserver(params IObserver<CounterValue>[] observers)
         {
             if (observers != null)
                 _observers = observers;
@@ -21,7 +21,7 @@ namespace CounterCatch.Observers
                 _observers = new IObserver<CounterValue>[0];
         }
 
-        public CounterAggregateObserver(IEnumerable<IObserver<CounterValue>> observers)
+        public MultiCounterObserver(IEnumerable<IObserver<CounterValue>> observers)
         {
             _observers = observers.ToArray();
         }
@@ -42,16 +42,6 @@ namespace CounterCatch.Observers
         {
             foreach (var o in _observers)
                 o.OnNext(value);
-        }
-
-        public void Dispose()
-        {
-            foreach (var o in _observers)
-            {
-                var disposable = o as IDisposable;
-                if (disposable != null)
-                    disposable.Dispose();
-            }
         }
     }
 }

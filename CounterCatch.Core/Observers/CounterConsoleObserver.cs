@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace CounterCatch.Observers
 {
-    public class CounterConsoleObserver : IObserver<CounterValue>
+    public class CounterConsoleObserver : CounterObserver
     {
         public void OnCompleted()
         {

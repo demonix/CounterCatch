@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace CounterCatch.Observers
 {
-    public class CounterTraceObserver : IObserver<CounterValue>
+    public class CounterTraceObserver : CounterObserver
     {
         static int EventId = 0;
         static TraceSource TraceSource = new TraceSource("CounterCatch", SourceLevels.All);

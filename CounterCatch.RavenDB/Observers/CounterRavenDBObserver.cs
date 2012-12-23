@@ -7,8 +7,7 @@ using System.Threading;
 
 namespace CounterCatch.Observers
 {
-    public class CounterCsvExportObserver : IObserver<CounterValue>
-                                            , IDisposable
+    public class CounterRavenDBObserver : IDisposable, CounterObserver
     {
         public void OnCompleted()
         {
@@ -24,7 +23,6 @@ namespace CounterCatch.Observers
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
 }
