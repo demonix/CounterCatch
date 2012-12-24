@@ -51,7 +51,7 @@ namespace CounterCatch.Configurations
 
                 foreach (var host in hostGroup.Hosts)
                 {
-                    var counterInfo = new CounterInfo(host.Name, counter.Category, counter.Name, counter.Instance);
+                    var counterInfo = new CounterInfo(counter.Id, host.Name, counter.Category, counter.Name, counter.Instance);
 
                     data.Add(counterInfo);
                 }

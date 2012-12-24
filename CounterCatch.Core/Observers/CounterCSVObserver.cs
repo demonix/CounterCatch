@@ -14,13 +14,15 @@ namespace CounterCatch.Observers
         StreamWriter _writer;
         readonly CultureInfo _culture;
         readonly string DateTimeFormat = "G";
+        DateTime _initialDate;
 
         public CounterCSVObserver(string destinationFile, string culture = "en-US")
         {
             _writer = new StreamWriter(destinationFile);
             _culture = CultureInfo.GetCultureInfo(culture);
+            _initialDate = DateTime.Now;
 
-            WriteFields("Time", "Host", "Category","Instance", "Name","Value");
+            WriteFields("Time", "Elapsed Milliseconds", "Host", "CounterId", "CounterCategory", "CounterInstance", "CounterName", "Value");
         }
 
         public void OnCompleted()
@@ -34,7 +36,9 @@ namespace CounterCatch.Observers
         public void OnNext(CounterValue value)
         {
             WriteFields(value.Time,
-                value.Counter.Host, 
+                (value.Time - _initialDate).TotalMilliseconds,
+                value.Counter.Host,
+                value.Counter.CounterId,
                 value.Counter.Category, 
                 value.Counter.Instance, 
                 value.Counter.Name,

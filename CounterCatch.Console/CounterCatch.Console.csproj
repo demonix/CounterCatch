@@ -88,10 +88,6 @@
       <Project>{e98abda3-cfb8-478b-8eca-ef55f12b5f7e}</Project>
       <Name>CounterCatch.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CounterCatch.RavenDB\CounterCatch.RavenDB.csproj">
-      <Project>{9fc2be29-6b18-4f36-8080-37c8b917b546}</Project>
-      <Name>CounterCatch.RavenDB</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

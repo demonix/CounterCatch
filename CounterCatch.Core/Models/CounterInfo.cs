@@ -10,14 +10,16 @@ namespace CounterCatch
     {
         public const string LocalHost = "localhost";
 
-        public CounterInfo(string host, string category, string name, string instance)
+        public CounterInfo(string counterId, string host, string category, string name, string instance)
         {
+            CounterId = counterId;
             Host = host;
             Category = category;
             Name = name;
             Instance = instance;
         }
 
+        public string CounterId { get; private set; }
         public string Name { get; private set; }
         public string Category { get; private set; }
         public string Host { get; private set; }
@@ -33,14 +35,10 @@ namespace CounterCatch
 
         public override string ToString()
         {
-            string instanceString = "";
-            if (!string.IsNullOrWhiteSpace(Instance))
-                instanceString = string.Format("/{0}", Instance);
-
             if (IsLocalHost)
-                return string.Format("{0}/{1}{2}", Category, Name, instanceString);
+                return CounterId;
 
-            return string.Format("{0}/{1}/{2}{3}", Host, Category, Name, instanceString);
+            return string.Format("{0}/{1}", Host, CounterId);
         }
     }
 }
