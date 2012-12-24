@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CounterCatch.Console", "CounterCatch.Console\CounterCatch.Console.csproj", "{00D1FCCA-DFA0-401C-B16D-A13A8107A8A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CounterCatch.Core", "CounterCatch.Core\CounterCatch.Core.csproj", "{E98ABDA3-CFB8-478B-8ECA-EF55F12B5F7E}"
@@ -8,6 +8,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CounterCatch.RavenDB", "CounterCatch.RavenDB\CounterCatch.RavenDB.csproj", "{9FC2BE29-6B18-4F36-8080-37C8B917B546}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CounterCatch.Configurations", "CounterCatch.Configurations\CounterCatch.Configurations.csproj", "{20D42AEA-7CAA-49C8-B0A1-C5676EE08FCD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5ED0E529-4F8A-4C12-A9A7-F40CB127DFD4}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
