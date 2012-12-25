@@ -65,6 +65,7 @@
     <Compile Include="Observers\CounterConsoleObserver.cs" />
     <Compile Include="Observers\CounterObserver.cs" />
     <Compile Include="Observers\CounterTraceObserver.cs" />
+    <Compile Include="PerformanceCounterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

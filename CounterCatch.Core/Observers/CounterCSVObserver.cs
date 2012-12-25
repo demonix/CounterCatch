@@ -22,7 +22,7 @@ namespace CounterCatch.Observers
             _culture = CultureInfo.GetCultureInfo(culture);
             _initialDate = DateTime.Now;
 
-            WriteFields("Time", "Elapsed Milliseconds", "Host", "Tag", "CounterCategory", "CounterInstance", "CounterName", "Value", "CounterType");
+            WriteFields("Time", "Elapsed Milliseconds", "Host", "CounterType", "CounterCategory", "CounterInstance", "CounterName", "Value");
         }
 
         public void OnCompleted()
@@ -38,12 +38,11 @@ namespace CounterCatch.Observers
             WriteFields(value.Time,
                 (value.Time - _initialDate).TotalMilliseconds,
                 value.Counter.Host,
-                value.Counter.Tag,
+                value.Counter.Type,
                 value.Counter.Category, 
                 value.Counter.Instance, 
                 value.Counter.Name,
-                value.Value,
-                value.Counter.CounterType);
+                value.Value);
         }
 
         void WriteFields(params object[] values)

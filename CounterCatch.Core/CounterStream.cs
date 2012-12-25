@@ -14,11 +14,7 @@ namespace CounterCatch
         {
             Counter = counter;
 
-            PerformanceCounter performanceCounter;
-            if (counter.IsLocalHost)
-                performanceCounter = new PerformanceCounter(counter.Category, counter.Name, counter.Instance);
-            else
-                performanceCounter = new PerformanceCounter(counter.Category, counter.Name, counter.Instance, counter.Host);
+            var performanceCounter = PerformanceCounterHelper.Get(counter.Category, counter.Name, counter.Instance, counter.Host);
 
             _data = Observable.Interval(TimeSpan.FromSeconds(1), NewThreadScheduler.Default)
                                 .Select((t) => NextData(performanceCounter))

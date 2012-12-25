@@ -52,7 +52,7 @@ namespace CounterCatch.Configurations
             }
         }
 
-        [ConfigurationProperty("name", IsRequired = true)]
+        [ConfigurationProperty("name", IsRequired = false, DefaultValue="*")]
         public string Name
         {
             get
@@ -65,7 +65,7 @@ namespace CounterCatch.Configurations
             }
         }
 
-        [ConfigurationProperty("instance", IsRequired = false, DefaultValue="")]
+        [ConfigurationProperty("instance", IsRequired = false, DefaultValue = "*")]
         public string Instance
         {
             get

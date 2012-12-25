@@ -11,23 +11,21 @@ namespace CounterCatch
     {
         public const string LocalHost = "localhost";
 
-        public CounterInfo(string tag, string host, string category, string name, string instance, 
-                            PerformanceCounterType counterType)
+        public CounterInfo(string host, string category, string name, string instance, 
+                            PerformanceCounterType type)
         {
-            Tag = tag;
             Host = host;
             Category = category;
             Name = name;
             Instance = instance;
-            CounterType = counterType;
+            Type = type;
         }
 
-        public string Tag { get; private set; }
         public string Name { get; private set; }
         public string Category { get; private set; }
         public string Host { get; private set; }
         public string Instance { get; private set; }
-        public PerformanceCounterType CounterType { get; private set; }
+        public PerformanceCounterType Type { get; private set; }
 
         public static bool IsMachineLocalHost(string host)
         {
