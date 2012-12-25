@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,35 +11,47 @@ namespace CounterCatch
     {
         public const string LocalHost = "localhost";
 
-        public CounterInfo(string counterId, string host, string category, string name, string instance)
+        public CounterInfo(string tag, string host, string category, string name, string instance, 
+                            PerformanceCounterType counterType)
         {
-            CounterId = counterId;
+            Tag = tag;
             Host = host;
             Category = category;
             Name = name;
             Instance = instance;
+            CounterType = counterType;
         }
 
-        public string CounterId { get; private set; }
+        public string Tag { get; private set; }
         public string Name { get; private set; }
         public string Category { get; private set; }
         public string Host { get; private set; }
         public string Instance { get; private set; }
+        public PerformanceCounterType CounterType { get; private set; }
+
+        public static bool IsMachineLocalHost(string host)
+        {
+            return string.Equals(LocalHost, host, StringComparison.InvariantCultureIgnoreCase);
+        }
 
         public bool IsLocalHost
         {
             get
             {
-                return string.Equals(LocalHost, Host, StringComparison.InvariantCultureIgnoreCase);
+                return IsMachineLocalHost(Host);
             }
         }
 
         public override string ToString()
         {
-            if (IsLocalHost)
-                return CounterId;
+            string instanceString = "";
+            if (!string.IsNullOrWhiteSpace(Instance))
+                instanceString = string.Format("/{0}", Instance);
 
-            return string.Format("{0}/{1}", Host, CounterId);
+            if (IsLocalHost)
+                return string.Format("{0}/{1}{2}", Category, Name, instanceString);
+ 
+            return string.Format("{0}/{1}/{2}{3}", Host, Category, Name, instanceString);
         }
     }
 }

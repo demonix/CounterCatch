@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,12 +52,74 @@ namespace CounterCatch.Configurations
 
                 foreach (var host in hostGroup.Hosts)
                 {
-                    var counterInfo = new CounterInfo(counter.Id, host.Name, counter.Category, counter.Name, counter.Instance);
+                    foreach (var instance in GetCounterInstances(counter, host))
+                    {
+                        foreach (var counterName in GetCounters(counter, host, instance))
+                        {
+                            using (var perfCounter = GetPerformanceCounter(counter.Category, counterName, instance, host.Name))
+                            {
+                                var counterInfo = new CounterInfo(counter.Id, host.Name, perfCounter.CategoryName, perfCounter.CounterName, perfCounter.InstanceName, perfCounter.CounterType);
 
-                    data.Add(counterInfo);
+                                data.Add(counterInfo);
+                            }
+                        }
+                    }
                 }
             }
             return data;
+        }
+
+        private IEnumerable<string> GetCounterInstances(CounterElement counter, HostElement host)
+        {
+            if (counter.Instance != "*")
+                return new string[]{counter.Instance};
+
+            PerformanceCounterCategory category = GetPerformanceCounterCategory(counter, host);
+
+            return category.GetInstanceNames();
+        }
+
+        private static PerformanceCounterCategory GetPerformanceCounterCategory(CounterElement counter, HostElement host)
+        {
+            PerformanceCounterCategory category;
+            if (CounterInfo.IsMachineLocalHost(host.Name))
+                category = new PerformanceCounterCategory(counter.Category);
+            else
+                category = new PerformanceCounterCategory(counter.Category, host.Name);
+            return category;
+        }
+
+        private static PerformanceCounter GetPerformanceCounter(string category, string counterName, string instance, string host)
+        {
+            if (CounterInfo.IsMachineLocalHost(host))
+                return new PerformanceCounter(category, counterName, instance, true);
+            else
+                return new PerformanceCounter(category, counterName, instance, host);
+        }
+
+        private IEnumerable<string> GetCounters(CounterElement counter, HostElement host, string instance)
+        {
+            if (counter.Name != "*")
+                return new string[] { counter.Name };
+
+            PerformanceCounterCategory category = GetPerformanceCounterCategory(counter, host);
+
+            PerformanceCounter[] counters;
+            if (string.IsNullOrWhiteSpace(instance))
+                counters = category.GetCounters();
+            else
+                counters = category.GetCounters(instance);
+
+            try
+            {
+                return counters.Select(p => p.CounterName).ToArray();
+            }
+            finally
+            {
+                foreach (var c in counters)
+                    c.Dispose();
+
+            }
         }
     }
 }
