@@ -6,10 +6,10 @@ Version: 0.1 Alpha
 Introduction
 ------------
 
-Counter Catch is a tool that can collect and export Windows Performance Counter data. You can easily configure performance counters to monitor and choose the prefered export method (currently only CSV file is supported).
-Counter Catch can be used to monitor performance counter data from various counters, instances and hosts. You can then easily aggregate the exported data and perform any custom analysis.
+Counter Catch is a Windows console application that can collect and export Windows Performance Counter data. You can select performance counters to monitor and choose the export method.
+Counter Catch can be used to monitor performance counter data from different counters, instances and hosts. Exported that can be aggregated and any custom analysis can be performed.
 
-You can write your custom observers with just a few lines of code to export data on different format or to perform real time calculation.
+Writing custom observers requires just a few lines of code, so you can export data on different format or perform real time calculation.
 
 Getting started
 ---------------
