@@ -62,7 +62,7 @@ namespace CounterCatch.Observers
                 return Convert.ToString(obj, _culture);
         }
 
-        public void Dispose()
+        private void DisposeWriter()
         {
             if (_writer != null)
             {
@@ -70,5 +70,36 @@ namespace CounterCatch.Observers
                 _writer = null;
             }
         }
+
+        #region Disposable pattern
+        bool _disposed = false;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if(disposing)
+                {
+                    // Cleanup managed resources
+
+                    DisposeWriter();
+                }
+
+                // Cleanup unmanaged resources
+
+                _disposed = true;
+            }
+        }
+
+        ~CounterCSVObserver()
+        {
+            Dispose(false);
+        }
+        #endregion
     }
 }

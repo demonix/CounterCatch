@@ -53,7 +53,7 @@ namespace CounterCatch.Observers
             }
         }
 
-        public void Dispose()
+        private void DisposeDocumentStore()
         {
             if (_documentStore != null)
             {
@@ -61,5 +61,36 @@ namespace CounterCatch.Observers
                 _documentStore = null;
             }
         }
+
+        #region Disposable pattern
+        bool _disposed = false;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if(disposing)
+                {
+                    // Cleanup managed resources
+
+                    DisposeDocumentStore();
+                }
+
+                // Cleanup unmanaged resources
+
+                _disposed = true;
+            }
+        }
+
+        ~CounterRavenDBObserver()
+        {
+            Dispose(false);
+        }
+        #endregion
     }
 }
