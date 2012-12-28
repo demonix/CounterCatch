@@ -81,7 +81,7 @@ namespace CounterCatch.Configurations
         /// <summary>
         /// Gets the interval in milliseconds for each sample.
         /// </summary>
-        [ConfigurationProperty("samplingInterval", IsRequired = false, DefaultValue = 1)]
+        [ConfigurationProperty("samplingInterval", IsRequired = false, DefaultValue = 1000)]
         public int SamplingInterval
         {
             get
