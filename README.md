@@ -1,7 +1,7 @@
 Counter Catch
 =============
 
-Version: 0.1 Alpha
+Version: 0.1 Beta
 
 Introduction
 ------------
@@ -14,14 +14,15 @@ Writing custom observers requires just a few lines of code, so you can export da
 Getting started
 ---------------
 
-To use CounterCatch you must get the latest source code and compile it using Visual Studio 2012. Then you can configure CounterCatch.Console.config file (see an example below) and run CounterCatch.Console.exe.
+To use CounterCatch you can download the latest release from [Source Forge] or you can get the latest source code and compile it using Visual Studio 2012. 
+Then configure `CounterCatch.Console.config` file (see an example below) and run `CounterCatch.Console.exe`.
 Counter Catch will automatically start to monitoring performance counters. To stop it just press Enter on the console.
 
 Configuration
 ---------------
 
 Configuration is quite self explanatory, basically you must configure the counters, hosts and observers.
-Here an example of a configuration file (CounterCatch.Console.config):
+Here an example of a configuration file (`CounterCatch.Console.config`):
 
 	<?xml version="1.0"?>
 	<configuration>
@@ -64,9 +65,9 @@ Available observers
 
 Currently these observers are suported:
 
-- CounterCatch.Observers.CounterConsoleObserver, CounterCatch.Core
-- CounterCatch.Observers.CounterCSVObserver, CounterCatch.Core
-- CounterCatch.Observers.CounterTraceObserver, CounterCatch.Core
+- `CounterCatch.Observers.CounterConsoleObserver, CounterCatch.Core`
+- `CounterCatch.Observers.CounterCSVObserver, CounterCatch.Core`
+- `CounterCatch.Observers.CounterTraceObserver, CounterCatch.Core`
 
 Here the code of the console observer:
 
@@ -108,3 +109,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 
 [MIT License]: http://opensource.org/licenses/mit-license.php
+[Source Forge]: https://sourceforge.net/projects/countercatch/files/

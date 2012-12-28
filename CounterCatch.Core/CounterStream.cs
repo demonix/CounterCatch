@@ -16,7 +16,7 @@ namespace CounterCatch
 
             var performanceCounter = PerformanceCounterHelper.Get(counter.Category, counter.Name, counter.Instance, counter.Host);
 
-            _data = Observable.Interval(TimeSpan.FromSeconds(1), NewThreadScheduler.Default)
+            _data = Observable.Interval(TimeSpan.FromMilliseconds(counter.SamplingInterval), NewThreadScheduler.Default)
                                 .Select((t) => NextData(performanceCounter))
                                 .Finally(() => performanceCounter.Dispose());
         }

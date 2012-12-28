@@ -77,5 +77,22 @@ namespace CounterCatch.Configurations
                 this["instance"] = value;
             }
         }
+
+        /// <summary>
+        /// Gets the interval in milliseconds for each sample.
+        /// </summary>
+        [ConfigurationProperty("samplingInterval", IsRequired = false, DefaultValue = 1)]
+        public int SamplingInterval
+        {
+            get
+            {
+                return (int)this["samplingInterval"];
+            }
+            set
+            {
+                this["samplingInterval"] = value;
+            }
+        }
+
     }
 }

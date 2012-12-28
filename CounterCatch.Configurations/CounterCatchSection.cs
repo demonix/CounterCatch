@@ -58,7 +58,9 @@ namespace CounterCatch.Configurations
                         {
                             using (var perfCounter = PerformanceCounterHelper.Get(counter.Category, counterName, instance, host.Name))
                             {
-                                var counterInfo = new CounterInfo(host.Name, perfCounter.CategoryName, perfCounter.CounterName, perfCounter.InstanceName, perfCounter.CounterType);
+                                var counterInfo = new CounterInfo(host.Name, perfCounter.CategoryName, perfCounter.CounterName, 
+                                                                            perfCounter.InstanceName, perfCounter.CounterType,
+                                                                            counter.SamplingInterval);
 
                                 data.Add(counterInfo);
                             }
