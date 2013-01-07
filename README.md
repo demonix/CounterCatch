@@ -1,7 +1,7 @@
 Counter Catch
 =============
 
-Version: 0.1 Beta
+Version: 0.2 Beta
 
 Introduction
 ------------

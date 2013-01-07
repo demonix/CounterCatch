@@ -37,13 +37,23 @@ namespace CounterCatch
 
             try
             {
-                return counters.Select(p => p.CounterName).ToArray();
+                return counters
+                        .Where(IsNotCounterBase)
+                        .Select(p => p.CounterName).ToArray();
             }
             finally
             {
                 foreach (var c in counters)
                     c.Dispose();
             }
+        }
+
+        private static bool IsNotCounterBase(PerformanceCounter p)
+        {
+            return p.CounterType != PerformanceCounterType.AverageBase
+                && p.CounterType != PerformanceCounterType.CounterMultiBase
+                && p.CounterType != PerformanceCounterType.RawBase
+                && p.CounterType != PerformanceCounterType.SampleBase;
         }
 
         private static PerformanceCounterCategory GetCategory(string category, string host)
