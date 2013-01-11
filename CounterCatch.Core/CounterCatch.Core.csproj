@@ -60,6 +60,7 @@
     <Compile Include="CounterStream.cs" />
     <Compile Include="Models\CounterValue.cs" />
     <Compile Include="Models\CounterInfo.cs" />
+    <Compile Include="Observers\CounterConsoleWriteLineObserver.cs" />
     <Compile Include="Observers\MultiCounterObserver.cs" />
     <Compile Include="Observers\CounterCSVObserver.cs" />
     <Compile Include="Observers\CounterConsoleObserver.cs" />
