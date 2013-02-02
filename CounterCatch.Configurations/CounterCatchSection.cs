@@ -50,6 +50,9 @@ namespace CounterCatch.Configurations
                 if (hostGroup == null)
                     throw new ConfigurationErrorsException(string.Format("HostGroup '{0}' not defined.", counter.HostGroup));
 
+                var condition = GetCondition(counter.Condition);
+                var transform = GetTransform(counter.Transform);
+
                 foreach (var host in hostGroup.Hosts)
                 {
                     foreach (var instance in GetInstances(counter, host))
@@ -60,7 +63,7 @@ namespace CounterCatch.Configurations
                             {
                                 var counterInfo = new CounterInfo(host.Name, perfCounter.CategoryName, perfCounter.CounterName, 
                                                                             perfCounter.InstanceName, perfCounter.CounterType,
-                                                                            counter.SamplingInterval);
+                                                                            counter.SamplingInterval, condition, transform);
 
                                 data.Add(counterInfo);
                             }
@@ -69,6 +72,30 @@ namespace CounterCatch.Configurations
                 }
             }
             return data;
+        }
+
+        private Predicate<double> GetCondition(string expression)
+        {
+            if (string.IsNullOrWhiteSpace(expression))
+                return null;
+
+            var interpreter = new DynamicExpresso.Interpreter();
+
+            var func = interpreter.Parse<Predicate<double>>(expression, "value");
+
+            return func;
+        }
+
+        private Func<double, double> GetTransform(string expression)
+        {
+            if (string.IsNullOrWhiteSpace(expression))
+                return null;
+
+            var interpreter = new DynamicExpresso.Interpreter();
+
+            var func = interpreter.Parse<Func<double, double>>(expression, "value");
+
+            return func;
         }
 
         private IEnumerable<string> GetCounters(CounterElement counter, HostElement host, string instance)

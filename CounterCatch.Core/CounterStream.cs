@@ -8,24 +8,39 @@ namespace CounterCatch
     public class CounterStream : IObservable<CounterValue>
     {
         IObservable<CounterValue> _data;
-        public CounterInfo Counter { get; private set; }
+        CounterInfo _counter;
+        public CounterInfo Counter { get {return _counter;} }
 
         public CounterStream(CounterInfo counter)
         {
-            Counter = counter;
+            _counter = counter;
 
             var performanceCounter = PerformanceCounterHelper.Get(counter.Category, counter.Name, counter.Instance, counter.Host);
 
-            _data = Observable.Interval(TimeSpan.FromMilliseconds(counter.SamplingInterval), NewThreadScheduler.Default)
+            _data = Observable.Interval(TimeSpan.FromMilliseconds(_counter.SamplingInterval), NewThreadScheduler.Default)
                                 .Select((t) => NextData(performanceCounter))
+                                .Where(Condition)
+                                .Select(Transform)
                                 .Finally(() => performanceCounter.Dispose());
+        }
+
+        bool Condition(CounterValue counterValue)
+        {
+            return _counter.Condition == null || _counter.Condition(counterValue.Value);
+        }
+
+        CounterValue Transform(CounterValue counterValue)
+        {
+            return _counter.Transform == null ?
+                counterValue :
+                new CounterValue(counterValue.Counter, counterValue.Time, _counter.Transform(counterValue.Value));
         }
 
         CounterValue NextData(PerformanceCounter performanceCounter)
         {
             float counterValue = performanceCounter.NextValue();
 
-            return new CounterValue(Counter, DateTime.Now, counterValue);
+            return new CounterValue(_counter, DateTime.Now, counterValue);
         }
 
         public IDisposable Subscribe(IObserver<CounterValue> observer)

@@ -94,5 +94,29 @@ namespace CounterCatch.Configurations
             }
         }
 
+        [ConfigurationProperty("condition", IsRequired = false, DefaultValue = "")]
+        public string Condition
+        {
+            get
+            {
+                return (string)this["condition"];
+            }
+            set
+            {
+                this["condition"] = value;
+            }
+        }
+        [ConfigurationProperty("transform", IsRequired = false, DefaultValue = "")]
+        public string Transform
+        {
+            get
+            {
+                return (string)this["transform"];
+            }
+            set
+            {
+                this["transform"] = value;
+            }
+        }
     }
 }

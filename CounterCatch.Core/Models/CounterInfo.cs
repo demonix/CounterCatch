@@ -12,7 +12,8 @@ namespace CounterCatch
         public const string LocalHost = "localhost";
 
         public CounterInfo(string host, string category, string name, string instance,
-                            PerformanceCounterType type, int samplingInterval)
+                            PerformanceCounterType type, int samplingInterval,
+                            Predicate<double> condition = null, Func<double, double> transform = null)
         {
             Host = host;
             Category = category;
@@ -20,6 +21,8 @@ namespace CounterCatch
             Instance = instance;
             Type = type;
             SamplingInterval = samplingInterval;
+            Condition = condition;
+            Transform = transform;
         }
 
         public string Name { get; private set; }
@@ -31,6 +34,9 @@ namespace CounterCatch
         /// Gets the interval in milliseconds for each sample.
         /// </summary>
         public int SamplingInterval { get; private set; }
+
+        public Predicate<double> Condition { get; private set; }
+        public Func<double, double> Transform { get; private set; }
 
         public static bool IsMachineLocalHost(string host)
         {
