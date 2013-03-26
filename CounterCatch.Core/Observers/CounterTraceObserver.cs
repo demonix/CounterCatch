@@ -12,6 +12,14 @@ namespace CounterCatch.Observers
         static int EventId = 0;
         static TraceSource TraceSource = new TraceSource("CounterCatch", SourceLevels.All);
 
+        public void Reset()
+        {
+        }
+
+        public void Init(IList<CounterInfo> counters)
+        {
+        }
+
         public void OnCompleted()
         {
             int eventId = Interlocked.Increment(ref EventId);

@@ -33,16 +33,29 @@ namespace CounterCatch
         {
             var section = Configurations.CounterCatchSection.GetSection();
 
-            var data = new MultiCounterStream(section.GetCounters());
+            var counters = section.GetCounters();
+            var data = new MultiCounterStream(counters);
 
             var observers = _container.ResolveAll<Observers.CounterObserver>();
 
             try
             {
-                using (data.Subscribe(new Observers.MultiCounterObserver(observers)))
+                Console.WriteLine("Press E to stop, R to reset values");
+
+                var observer = new Observers.MultiCounterObserver(observers);
+                observer.Init(counters);
+                using (data.Subscribe(observer))
                 {
-                    Console.WriteLine("Press enter to stop");
-                    Console.ReadLine();
+                    while (true)
+                    {
+                        var key = Console.ReadKey(true);
+                        if (key.Key == ConsoleKey.E)
+                            break;
+                        if (key.Key == ConsoleKey.R)
+                        {
+                            observer.Reset();
+                        }
+                    }
                 }
             }
             finally

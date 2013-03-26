@@ -7,5 +7,8 @@ namespace CounterCatch.Observers
 {
     public interface CounterObserver : IObserver<CounterValue>
     {
+        void Reset();
+
+        void Init(IList<CounterInfo> counters);
     }
 }

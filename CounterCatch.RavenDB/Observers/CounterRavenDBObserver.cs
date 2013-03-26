@@ -35,6 +35,14 @@ namespace CounterCatch.Observers
             _documentStore.Initialize();
         }
 
+        public void Reset()
+        {
+        }
+
+        public void Init(IList<CounterInfo> counters)
+        {
+        }
+
         public void OnCompleted()
         {
         }

@@ -9,6 +9,14 @@ namespace CounterCatch.Observers
 {
     public class CounterConsoleWriteLineObserver : CounterObserver
     {
+        public void Reset()
+        {
+        }
+
+        public void Init(IList<CounterInfo> counters)
+        {
+        }
+
         public void OnCompleted()
         {
         }

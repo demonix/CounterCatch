@@ -26,6 +26,24 @@ namespace CounterCatch.Observers
             _observers = observers.ToArray();
         }
 
+        public void Reset()
+        {
+            foreach (var o in _observers)
+            {
+                if (o is CounterObserver)
+                    ((CounterObserver)o).Reset();
+            }
+        }
+
+        public void Init(IList<CounterInfo> counters)
+        {
+            foreach (var o in _observers)
+            {
+                if (o is CounterObserver)
+                    ((CounterObserver)o).Init(counters);
+            }
+        }
+
         public void OnCompleted()
         {
             foreach (var o in _observers)
