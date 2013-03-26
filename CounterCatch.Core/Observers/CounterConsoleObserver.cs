@@ -37,7 +37,9 @@ namespace CounterCatch.Observers
             int row = FIRST_DATA_ROW;
             foreach (var c in counters)
             {
-                _data.Add(GetCounterShortName(c), new Stats(c, row++));
+				string key = GetCounterShortName(c);
+				if (!_data.ContainsKey(key))
+	                _data.Add(GetCounterShortName(c), new Stats(c, row++));
             }
 
             UpdateConsoleDataRow(HEADER_ROW, "Counter",
